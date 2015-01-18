@@ -25,12 +25,10 @@ With
 * transmissionrpc
 * pyquery
 * beautifulsoup4
-* beautifulsoup4
 * requests
 * pyOpenSSL
 * pyasn1
 * ndg-httpsclient
-* httplib
 * json
 * [API-EZTV.it](https://github.com/PaulSec/API-EZTV.it)
 
