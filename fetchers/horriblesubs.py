@@ -4,35 +4,37 @@ import httplib
 from pyquery import PyQuery as pq
 
 #check animes from horriblesubs
-def get_links():
-  watch_list_file = open('resources/watchlist', 'r')
-  watch_list = json.load(watch_list_file)
-
+def get_links(watchlist):
   conn = httplib.HTTPConnection("www.horriblesubs.info")
-
   links = []
 
-  for anime in watch_list:
-    anime_name = anime["name"]
-    (last_downloaded_season, last_downloaded_episode) = anime["lastDownloaded"].split("-")
+  for anime in watchlist:
+    name = anime["name"]
+    (last_season, last_episode) = anime["lastDownloaded"].split("-")
 
-    conn.request("GET", "/lib/search.php?value=" + anime_name)
+    conn.request("GET", "/lib/search.php?value=" + name)
     data = conn.getresponse().read()
-
     dom = pq(data)
 
     episodes = dom(".episode")
     torrents = dom(".episode > .resolutions-block > .resolution-block > #1080p > .ind-link:nth-child(3) > a")
 
     for i in range(len(episodes)):
-      name =  pq(episodes[i]).attr("id")
-      episode =  name.split("-")[-1]
-      season =  "00"
-      if name.split("-")[-2].isdigit():
-        season = name.split("-")[-2]
-      if name.split("-")[-2].startswith("s"):
-        season = name.split("-")[-2][1:]
-      if season > last_downloaded_season and episode > last_downloaded_episode:
-        links.append(pq(torrents[i]).attr("href"))
+      label =  pq(episodes[i]).attr("id")
+      episode =  label.split("-")[-1]
+      season =  "01"
+      if label.split("-")[-2].isdigit():
+        season = label.split("-")[-2]
+      if label.split("-")[-2].startswith("s"):
+        season = label.split("-")[-2][1:]
+      
+      if season < 10: 
+        season = 0 + season
+      if episode < 10: 
+        episode = 0 + episode
+
+      if season >= last_season and episode > last_episode:
+        link = pq(torrents[i]).attr("href")
+        links.append((name, season, episode, link))
 
   return links

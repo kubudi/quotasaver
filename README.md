@@ -37,13 +37,13 @@ What to do
 ----------
 Ordered by priority:
 
-* Update *lastDownloaded* value after adding torrent
-* An ez.tv fetcher. Library is already here, we need to modify it for torrents(instead of magnets).
-* A subtitle fetcher for tv shows(opensubtitles.com and altyazi.org should be first)
-* An html page for adding shows to watchlist.(template file is already there we need a simple http server and few ajax requests)
-* A Scheduler for running script occasionally.(just cron might be enough)
-* A checklist for storing who watched which episode. 
-* A logic for determining which episode is wathced by all and shoud be removed. And setting *storeSince* value.
-* A cleaner job removes files according to the *storeSince* value.
-* A server for serving files locally.(maybe a mediaserver as well)
-* MOAR fetchers
+* [x] Update *lastDownloaded* value after adding torrent
+* [ ] An ez.tv fetcher. Library is already here, we need to modify it for torrents(instead of magnets).
+* [ ] A subtitle fetcher for tv shows(opensubtitles.com and altyazi.org should be first)
+* [ ] An html page for adding shows to watchlist.(template file is already there we need a simple http server and few ajax requests)
+* [ ] A Scheduler for running script occasionally.(just cron might be enough)
+* [ ] A checklist for storing who watched which episode. 
+* [ ] A logic for determining which episode is wathced by all and shoud be removed. And setting *storeSince* value.
+* [ ] A cleaner job removes files according to the *storeSince* value.
+* [ ] A server for serving files locally.(maybe a mediaserver as well)
+* [ ] MOAR fetchers
