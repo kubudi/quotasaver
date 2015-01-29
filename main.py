@@ -3,10 +3,28 @@ import os
 import json
 import httplib
 
-
 from utils import Config as conf
 from fetchers import horriblesubs
 from fetchers import eztv
+
+def update_last_download(download_list, watchlist, file_name):
+  last_down = {}
+  for (name, season, episode, link) in download_list:
+    if name not in last_down.keys():
+      last_down[name] = {"season": season, "episode": episode}
+    else:
+      if last_down[name]["season"] < season:
+        last_down[name]["season"] = season
+      if last_down[name]["episode"] < episode:
+        last_down[name]["episode"] = episode
+
+
+  for item in watchlist:
+    name = item["name"]
+    if name in last_down.keys():
+      item["lastDownloaded"] = last_down[name]["season"] + "-" + last_down[name]["episode"]
+
+  json.dump(watchlist, open(file_name, 'w'), indent=4, sort_keys=True)
 
 #get the client
 host = conf.getstring("Transmission", "host")
@@ -14,33 +32,31 @@ port = conf.getint("Transmission", "port")
 client = transmissionrpc.Client(host, port=port)
 
 links = []
+magnets = []
 
-#add other fetchers here
-anime_watchlist = json.load(open('resources/anime_watchlist', 'r'))
+#horriblesubs
+anime_file = 'resources/anime_watchlist'
+anime_watchlist = json.load(open(anime_file, 'r'))
 anime_links = horriblesubs.get_links(anime_watchlist)
-#links += eztv.get_links()
-
 links += anime_links
 
+#eztv.ch
+show_file = 'resources/show_watchlist'
+show_watchlist = json.load(open(show_file, 'r'))
+show_magnets = eztv.get_links(show_watchlist)
+magnets += show_magnets
+
+#add other fetchers here
+###
+
+#fetch torrent from link
 for link in links:
   client.add_torrent(link[3])
 
+#fetch torrent from magnet
+for magnet in magnets:
+  client.add(None, filename=magnet[3])
 
-#update last downloaded
-last_down = {}
-for (name, season, episode, link) in anime_links:
-  if name not in last_down.keys():
-    last_down[name] = {"season": season, "episode": episode}
-  else:
-    if last_down[name]["season"] < season:
-      last_down[name]["season"] = season
-    if last_down[name]["episode"] < episode:
-      last_down[name]["episode"] = episode
-
-
-for anime in anime_watchlist:
-  name = anime["name"]
-  if name in last_down.keys():
-    anime["lastDownloaded"] = last_down[name]["season"] + "-" + last_down[name]["episode"]
-
-json.dump(anime_watchlist, open('resources/anime_watchlist', 'w'), indent=4, sort_keys=True)
+#update last downloaded shows info in watch lists
+update_last_download(anime_links, anime_watchlist, anime_file)
+update_last_download(show_magnets, show_watchlist, show_file)

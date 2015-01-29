@@ -25,7 +25,7 @@ def get_links(watchlist):
       season =  "01"
       if label.split("-")[-2].isdigit():
         season = label.split("-")[-2]
-      if label.split("-")[-2].startswith("s"):
+      if label.split("-")[-2].startswith("s") and label.split("-")[-2][1:].isdigit():
         season = label.split("-")[-2][1:]
       
       if season < 10: 
