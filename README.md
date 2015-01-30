@@ -38,7 +38,7 @@ What to do
 Ordered by priority:
 
 * [x] Update *lastDownloaded* value after adding torrent
-* [ ] An ez.tv fetcher. Library is already here, we need to modify it for torrents(instead of magnets).
+* [x] An ez.tv fetcher. Library is already here, we need to modify it for torrents(instead of magnets). ( we didn't :) )
 * [ ] A subtitle fetcher for tv shows(opensubtitles.com and altyazi.org should be first)
 * [ ] An html page for adding shows to watchlist.(template file is already there we need a simple http server and few ajax requests)
 * [ ] A Scheduler for running script occasionally.(just cron might be enough)
