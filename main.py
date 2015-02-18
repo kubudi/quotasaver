@@ -4,6 +4,7 @@ import json
 import httplib
 
 from utils import Config as conf
+from fetchers.opensubtitle import OpenSubtitle
 from fetchers import horriblesubs
 from fetchers import eztv
 
@@ -39,7 +40,7 @@ anime_file = 'resources/anime_watchlist'
 anime_watchlist = json.load(open(anime_file, 'r'))
 anime_links = horriblesubs.get_links(anime_watchlist)
 links += anime_links
-
+ 
 #eztv.ch
 show_file = 'resources/show_watchlist'
 show_watchlist = json.load(open(show_file, 'r'))
@@ -60,3 +61,14 @@ for magnet in magnets:
 #update last downloaded shows info in watch lists
 update_last_download(anime_links, anime_watchlist, anime_file)
 update_last_download(show_magnets, show_watchlist, show_file)
+
+#OpenSubtitle Configs
+username = conf.getstring("OpenSubtitle", "username")
+password = conf.getstring("OpenSubtitle", "password")
+useragent = conf.getstring("OpenSubtitle", "useragent")
+sublang = conf.getstring("OpenSubtitle", "sublang")
+sourcepath = conf.getstring("OpenSubtitle", "sourcepath")
+
+#Get Series Subtitles except animes
+opensub = OpenSubtitle(username, password, useragent)
+opensub.downloadSubtitles(sourcepath, sublang)
