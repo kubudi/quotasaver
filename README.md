@@ -22,6 +22,7 @@ If there is a new episode, finds its torrent link(somehow) and sends it to remot
 
 With
 -----
+* Flask
 * transmissionrpc
 * pyquery
 * beautifulsoup4

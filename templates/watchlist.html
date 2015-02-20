@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  </head>
+<style>
+  table td {
+    vertical-align: bottom;
+  }
+  #error {
+    color:red;
+  }
+  .anime {
+    text-decoration: underline;
+  }
+  .lists > ul {
+    float: left;
+    margin-right: 20px;
+  }
+</style>
+  <body>
+    <form id="add_new" style="display: inline">
+    <table>
+      <tbody>
+        <tr>
+          <td>
+            <label for="name">name<br>
+            <input type="text" id="name" value="" placeholder="name">
+            </label>
+          </td>
+          <td>
+            <label for="last_watched">last watched<br> 
+            <input type="text" id="last_watched" value="01-00" pattern="[0-9][1-9]-[0-9]{2}[0-9]?">
+            </label>
+          </td>
+          <td>
+            <label for="store_since">store since<br>
+            <input type="text" id="store_since" value="01-00" pattern="[0-9][1-9]-[0-9]{2}[0-9]?">
+            </label>
+          </td>
+          <td>
+            <label for="type">type<br>
+            <select id="type" name="type">
+              <option value="show">show</option>
+              <option value="anime">anime</option>
+            </select>
+            </label>
+          </td>
+          <td>
+            <button id="addToList">Add</button>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="5">
+          <span id="error"></span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+      
+    </form>
+    <div class="lists">
+      <ul id="showlist">
+        <h2>shows</h2>
+        {% for name in shows %}
+          <li class='show'> {{name}} </li>
+        {% endfor %}
+      </ul>
+
+      <ul id="animelist">
+        <h2>animes</h2>
+        {% for name in animes %}
+          <li class='anime'> {{name}} </li>
+        {% endfor %}
+      </ul>
+    </div>
+    <script type="text/javascript">
+    $( document ).ready(function() {
+
+      $("#add_new").on("submit", function(e){
+        e.preventDefault();
+
+        var name = $('#name').val()
+        var lastWatched = $('#last_watched').val()
+        var storeSince = $('#store_since').val()
+        var type = $('#type').val()
+
+        $.ajax({
+          type: "POST",
+          contentType: "application/json",
+          dataType: 'json',
+          url: "http://localhost:5000/watchlist/add",
+          data: JSON.stringify({
+            "name": name,
+            "lastWatched": lastWatched,
+            "storeSince": storeSince,
+            "type": type
+          })
+        }).done(function( msg ) {
+          if(msg.status == "success") {
+
+            $('#'+type+'list').append("<li class='"+type+"'>" + name + "</li>")
+            $('#error').text("")
+          }
+          else
+            $('#error').text(msg.status)
+        }).fail(function( msg ) {
+          $('#error').text(msg)
+        });
+      })
+    });
+    </script>
+  </body>
+</html>
