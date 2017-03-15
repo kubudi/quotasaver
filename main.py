@@ -69,6 +69,6 @@ useragent = conf.getstring("OpenSubtitle", "useragent")
 sublang = conf.getstring("OpenSubtitle", "sublang")
 sourcepath = conf.getstring("OpenSubtitle", "sourcepath")
 
-#Get Series Subtitles except animes
+# Get Series Subtitles except animes
 opensub = OpenSubtitle(username, password, useragent)
-opensub.downloadSubtitles(sourcepath, sublang)
+opensub.download_subs(sourcepath, sublang)
