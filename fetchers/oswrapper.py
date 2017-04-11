@@ -3,6 +3,7 @@ import struct
 
 from xmlrpclib import ServerProxy
 
+
 class OpenSubtitlesWrapper(object):
     '''OpenSubtitles API wrapper.
 
@@ -11,7 +12,8 @@ class OpenSubtitlesWrapper(object):
     '''
 
     def __init__(self):
-        self.xmlrpc = ServerProxy('http://api.opensubtitles.org/xml-rpc', allow_none=True)
+        url = 'http://api.opensubtitles.org/xml-rpc'
+        self.xmlrpc = ServerProxy(url, allow_none=True)
         self.language = 'en'
         self.token = None
 
@@ -26,7 +28,7 @@ class OpenSubtitlesWrapper(object):
         '''Returns token is login is ok, otherwise None.
         '''
         self.data = self.xmlrpc.LogIn(username, password,
-                                 self.language, useragent)
+                                      self.language, useragent)
         token = self._get_from_data_or_none('token')
         if token:
             self.token = token
@@ -62,6 +64,7 @@ class OpenSubtitlesWrapper(object):
     def search_movies_on_imdb(self, params):
         self.data = self.xmlrpc.SearchMoviesOnIMDB(self.token, params)
         return self.data
+
 
 class File(object):
     def __init__(self, path):
